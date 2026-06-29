@@ -402,7 +402,7 @@ export default function ObtainPage() {
               style={{ background: "#2d4a2d" }}
             >
               {submitted ? (
-                <span>✓ Submitted! Redirecting...</span>
+                <span>✓ Submitted!...</span>
               ) : isSubmitting ? (
                 <span>Submitting...</span>
               ) : (
