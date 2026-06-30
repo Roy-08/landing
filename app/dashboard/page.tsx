@@ -259,7 +259,7 @@ export default function DashboardPage() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const GOOGLE_SHEET_URL =
-    "https://script.google.com/macros/s/AKfycbzWAulQnmFFBl7lVE9pKJBxGQqn0wkjiecMT-SAQWmDbtRK4F8ZICTNFO7nFj6-5ihwhQ/exec";
+    "https://script.google.com/macros/s/AKfycbwxpW_GAnB0p9SyBpWmIw46r3_yt_xYLQFv5pH2X3r65TGiT-ILWHUHbp71nQIs9nAuMg/exec";
 
   const isConfigured = !GOOGLE_SHEET_URL.includes("YOUR_GOOGLE_SCRIPT_ID");
 
