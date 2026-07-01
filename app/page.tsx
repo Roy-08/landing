@@ -301,7 +301,7 @@ export default function ObtainPage() {
             This page is for you.
           </p>
 
-          <p className="text-center" style={{ color: "#362E69", fontFamily: "'Outfit', sans-serif", fontSize: "1.7rem", fontWeight: 400, lineHeight: 1.6, marginBottom: "1rem", ...revealStyle(3) }}>
+          <p className="text-center" style={{ color: "#362E69", fontFamily: "'Outfit', sans-serif", fontSize: "1.7rem", fontWeight: 700, lineHeight: 1.6, marginBottom: "1rem", ...revealStyle(3) }}>
             We help people resolve{" "}
             <span className="shimmer-text" style={{ fontWeight: 700 }}>Burnout</span>{" "}
             and{" "}
@@ -310,7 +310,7 @@ export default function ObtainPage() {
             <span className="shimmer-text" style={{ fontWeight: 700 }}>dream life</span>.
           </p>
 
-          <p className="text-center" style={{ color: "#362E69", fontFamily: "'Outfit', sans-serif", fontSize: "1.5rem", fontWeight: 700, ...revealStyle(4) }}>
+          <p className="text-center" style={{ color: "#362E69", fontFamily: "'Outfit', sans-serif", fontSize: "1.5rem", fontWeight: 350, ...revealStyle(4) }}>
             Risk free program. Money Back Guarantee.
           </p>
 
