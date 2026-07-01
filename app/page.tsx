@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function ObtainPage() {
   const [formData, setFormData] = useState({
@@ -11,6 +11,136 @@ export default function ObtainPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [visibleLines, setVisibleLines] = useState(0);
+  const [focusedField, setFocusedField] = useState<string | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const timers: NodeJS.Timeout[] = [];
+    for (let i = 1; i <= 4; i++) {
+      timers.push(setTimeout(() => setVisibleLines(i), i * 350));
+    }
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animationId: number;
+
+    type Wave = {
+      amplitude: number;
+      frequency: number;
+      speed: number;
+      phase: number;
+      yOffset: number;
+      color: string;
+      opacity: number;
+      thickness: number;
+    };
+
+    const waves: Wave[] = [];
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    const waveColors = [
+      { color: "rgba(239,154,126,", opacity: 0.22 },
+      { color: "rgba(180,177,213,", opacity: 0.20 },
+      { color: "rgba(200,180,255,", opacity: 0.18 },
+      { color: "rgba(255,200,180,", opacity: 0.20 },
+      { color: "rgba(160,140,200,", opacity: 0.16 },
+      { color: "rgba(239,154,126,", opacity: 0.18 },
+      { color: "rgba(180,177,213,", opacity: 0.22 },
+      { color: "rgba(200,180,255,", opacity: 0.16 },
+    ];
+
+    for (let i = 0; i < waveColors.length; i++) {
+      waves.push({
+        amplitude: Math.random() * 100 + 50,
+        frequency: Math.random() * 0.003 + 0.001,
+        speed: Math.random() * 0.01 + 0.004,
+        phase: Math.random() * Math.PI * 2,
+        yOffset: (canvas.height / (waveColors.length + 1)) * (i + 1),
+        color: waveColors[i].color,
+        opacity: waveColors[i].opacity,
+        thickness: Math.random() * 80 + 40,
+      });
+    }
+
+    let time = 0;
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      time += 1;
+
+      waves.forEach((w) => {
+        ctx.beginPath();
+        ctx.moveTo(0, w.yOffset + Math.sin(w.phase + time * w.speed) * w.amplitude);
+
+        for (let x = 0; x <= canvas.width; x += 4) {
+          const y =
+            w.yOffset +
+            Math.sin(w.phase + x * w.frequency + time * w.speed) * w.amplitude +
+            Math.sin(w.phase * 0.5 + x * w.frequency * 1.5 + time * w.speed * 0.7) * (w.amplitude * 0.3);
+          ctx.lineTo(x, y);
+        }
+
+        ctx.lineTo(canvas.width, canvas.height);
+        ctx.lineTo(0, canvas.height);
+        ctx.closePath();
+
+        const gradient = ctx.createLinearGradient(0, w.yOffset - w.amplitude, 0, w.yOffset + w.amplitude + w.thickness);
+        gradient.addColorStop(0, w.color + "0)");
+        gradient.addColorStop(0.2, w.color + w.opacity + ")");
+        gradient.addColorStop(0.5, w.color + (w.opacity * 0.7) + ")");
+        gradient.addColorStop(1, w.color + "0)");
+
+        ctx.fillStyle = gradient;
+        ctx.fill();
+      });
+
+      for (let i = 0; i < 6; i++) {
+        const orbX = canvas.width * (0.1 + i * 0.16) + Math.sin(time * 0.006 + i * 1.3) * 80;
+        const orbY = canvas.height * (0.15 + i * 0.14) + Math.cos(time * 0.005 + i * 0.9) * 50;
+        const orbR = 120 + Math.sin(time * 0.004 + i) * 40;
+
+        const orbGrad = ctx.createRadialGradient(orbX, orbY, 0, orbX, orbY, orbR);
+        const orbColors = [
+          "rgba(239,154,126,",
+          "rgba(180,177,213,",
+          "rgba(200,180,255,",
+          "rgba(255,200,180,",
+          "rgba(160,140,200,",
+          "rgba(239,154,126,",
+        ];
+        const c = orbColors[i % orbColors.length];
+        orbGrad.addColorStop(0, c + "0.15)");
+        orbGrad.addColorStop(0.4, c + "0.08)");
+        orbGrad.addColorStop(1, c + "0)");
+
+        ctx.beginPath();
+        ctx.arc(orbX, orbY, orbR, 0, Math.PI * 2);
+        ctx.fillStyle = orbGrad;
+        ctx.fill();
+      }
+
+      animationId = requestAnimationFrame(animate);
+    };
+    animate();
+
+    return () => {
+      cancelAnimationFrame(animationId);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -30,9 +160,7 @@ export default function ObtainPage() {
         await fetch(GOOGLE_SHEET_URL, {
           method: "POST",
           mode: "no-cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             name: formData.name,
             email: formData.email,
@@ -44,305 +172,262 @@ export default function ObtainPage() {
       }
 
       setSubmitted(true);
-      setTimeout(() => {
-        window.location.href = "/home";
-      }, 2000);
+      setTimeout(() => { window.location.href = "/home"; }, 2000);
     } catch (error) {
       console.error("Error submitting form:", error);
       setSubmitted(true);
-      setTimeout(() => {
-        window.location.href = "/home";
-      }, 2000);
+      setTimeout(() => { window.location.href = "/home"; }, 2000);
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const revealStyle = (index: number): React.CSSProperties => ({
+    opacity: visibleLines >= index ? 1 : 0,
+    transform: visibleLines >= index ? "translateY(0)" : "translateY(25px)",
+    transition: "all 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
+  });
+
+  const getInputStyle = (fieldName: string): React.CSSProperties => {
+    const isFocused = focusedField === fieldName;
+    return {
+      width: "100%",
+      padding: "16px 20px 16px 48px",
+      borderRadius: "14px",
+      fontSize: "1.1rem",
+      fontFamily: "'Outfit', sans-serif",
+      fontWeight: 500,
+      color: "#362E69",
+      background: isFocused ? "rgba(255,255,255,0.92)" : "rgba(255,255,255,0.7)",
+      border: isFocused ? "2px solid rgba(180,177,213,0.6)" : "1.5px solid rgba(180,177,213,0.3)",
+      outline: "none",
+      backdropFilter: "blur(10px)",
+      boxShadow: isFocused
+        ? "0 0 0 4px rgba(180,177,213,0.1), 0 4px 16px rgba(180,177,213,0.15)"
+        : "0 2px 8px rgba(54,46,105,0.05)",
+      transition: "all 0.3s ease",
+    };
+  };
+
+  const iconStyle = (fieldName: string): React.CSSProperties => {
+    const isFocused = focusedField === fieldName;
+    return {
+      position: "absolute",
+      left: "16px",
+      top: "50%",
+      transform: "translateY(-50%)",
+      color: isFocused ? "#6B5B95" : "#B4B1D5",
+      transition: "color 0.3s ease",
+    };
+  };
+
   return (
-    <div
-      className="min-h-screen flex items-center justify-center px-1 py-1 relative overflow-hidden"
-      style={{ background: "#faf6ef" }}
-    >
-      {/* Background Organic Blobs */}
-      <div
-        className="absolute -left-20 top-1/4 w-80 h-80 rounded-full opacity-30"
-        style={{
-          background: "radial-gradient(circle, #f0d98c 0%, transparent 70%)",
-          filter: "blur(40px)",
-        }}
-      />
-      <div
-        className="absolute -right-20 bottom-1/4 w-96 h-96 rounded-full opacity-25"
-        style={{
-          background: "radial-gradient(circle, #b5c99a 0%, transparent 70%)",
-          filter: "blur(50px)",
-        }}
+    <>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Charm:wght@400;700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet"
       />
 
-      {/* Decorative: Leafy sprig - Top Left */}
-      
+      <style>{`
+        @keyframes shimmerText {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
+        }
+        @keyframes btnShine {
+          0% { left: -100%; }
+          100% { left: 200%; }
+        }
+        .shimmer-text {
+          background: linear-gradient(90deg, #EF9A7E 0%, #D4603E 40%, #EF9A7E 80%);
+          background-size: 200% auto;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          animation: shimmerText 3s linear infinite;
+        }
+        .btn-shine { position: relative; overflow: hidden; }
+        .btn-shine::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 50%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+          animation: btnShine 3s ease-in-out infinite;
+        }
+        input::placeholder { color: rgba(107,91,149,0.45); font-weight: 400; }
+        input:focus::placeholder { color: rgba(180,177,213,0.5); }
+      `}</style>
 
-      {/* Main Content */}
-      <div className="w-full max-w-md mx-auto relative z-10">
-        {/* UPLIFT Heading */}
-        <h1
-          className="text-5xl md:text-6xl font-bold tracking-wide text-center mb-2"
-          style={{ color: "#2d4a2d", fontFamily: "system-ui, -apple-system, sans-serif" }}
-        >
-          UPLIFT
-        </h1>
+      <div
+        className="w-full min-h-screen relative"
+        style={{
+          background:
+            "linear-gradient(150deg, #FDF6F0 0%, #F9ECF5 20%, #F0E8FA 40%, #EAE2F8 55%, #E8E0F5 70%, #F5EAF2 85%, #FDF5EE 100%)",
+        }}
+      >
+        <canvas
+          ref={canvasRef}
+          className="fixed inset-0 w-full h-full pointer-events-none"
+          style={{ zIndex: 0 }}
+        />
 
-        {/* SECTION 1: "If you are a founder..." - Bordered box */}
-        <div
-          className="rounded-2xl p-6 mb-5 text-center"
-          style={{
-            background: "#f8f3e8",
-            border: "1.5px solid #c5b89a",
-          }}
-        >
-          {/* Heart circle icon */}
-          <div className="flex justify-center mb-1">
-            <div
-              className="w-10 h-10 rounded-full flex items-center justify-center"
-              style={{ background: "#8aad6e" }}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="white" stroke="none">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-              </svg>
-            </div>
-          </div>
-
-          <p className="text-[#3d3d3d] text-base leading-relaxed mb-2">
-            If you are a{" "}
-            <span className="font-bold text-[#2d4a2d]">founder, Doctor, CXOs, CEO</span> of
-            your life.
-          </p>
-          <p
-            className="text-[#2d4a2d] text-lg"
-            style={{ fontFamily: "'Georgia', 'Times New Roman', serif", fontStyle: "italic" }}
+        <div className="relative z-10 w-full max-w-5xl mx-auto px-12 pt-12 pb-14 flex flex-col items-center">
+          {/* Uplift Title */}
+          <h1
+            className="text-center"
+            style={{
+              color: "#362E69",
+              fontFamily: "'Charm', cursive",
+              fontWeight: 700,
+              fontSize: "5rem",
+              lineHeight: 1.1,
+              textShadow: "0 4px 20px rgba(239,154,126,0.3)",
+              letterSpacing: "0.06em",
+              marginBottom: "2.5rem",
+            }}
           >
+            Uplift
+          </h1>
+
+          <p className="text-center" style={{ color: "#362E69", fontFamily: "'Outfit', sans-serif", fontSize: "1.7rem", fontWeight: 400, lineHeight: 1.6, marginBottom: "0.6rem", ...revealStyle(1) }}>
+            If you are a{" "}
+            <span className="shimmer-text" style={{ fontWeight: 700 }}>founder, Doctor, CXOs, CEO</span>{" "}
+            of your life.
+          </p>
+
+          <p className="text-center" style={{ color: "#6B5B95", fontFamily: "'Outfit', sans-serif", fontSize: "2.1rem", fontWeight: 600, marginBottom: "1.5rem", ...revealStyle(2) }}>
             This page is for you.
           </p>
-        </div>
 
-        {/* SECTION 2: "We help people resolve..." - Different style, no border box */}
-        <div className="text-center mb-8 px-2">
-          <p className="text-[#3d3d3d] text-base leading-relaxed mb-1">
-            We help people resolve <span className="font-bold text-[#2d4a2d]">Burnout</span>{" "}
-            and <span className="font-bold text-[#2d4a2d]">manifest</span> their{" "}
-            <span className="font-bold text-[#2d4a2d]">dream life</span>.
+          <p className="text-center" style={{ color: "#362E69", fontFamily: "'Outfit', sans-serif", fontSize: "1.7rem", fontWeight: 400, lineHeight: 1.6, marginBottom: "1rem", ...revealStyle(3) }}>
+            We help people resolve{" "}
+            <span className="shimmer-text" style={{ fontWeight: 700 }}>Burnout</span>{" "}
+            and{" "}
+            <span className="shimmer-text" style={{ fontWeight: 700 }}>manifest</span>{" "}
+            their{" "}
+            <span className="shimmer-text" style={{ fontWeight: 700 }}>dream life</span>.
           </p>
 
-          <p
-            className="text-[#c8963e] text-base mb-1"
-            style={{ fontFamily: "'Georgia', 'Times New Roman', serif", fontStyle: "italic" }}
-          >
-            Risk free program.
+          <p className="text-center" style={{ color: "#362E69", fontFamily: "'Outfit', sans-serif", fontSize: "1.5rem", fontWeight: 700, ...revealStyle(4) }}>
+            Risk free program. Money Back Guarantee.
           </p>
 
-          {/* Gold heart */}
-          
-          <p className="text-[#2d4a2d] font-semibold text-base">
-            Money Back Guarantee.
-          </p>
-        </div>
-
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-2">
-          {/* Name Field */}
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2">
-              <div
-                className="w-8 h-8 rounded-full flex items-center justify-center"
-                style={{ background: "#8aad6e" }}
-              >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                  <circle cx="12" cy="7" r="4" />
-                </svg>
-              </div>
-            </span>
-            <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="w-full pl-14 pr-4 py-3 rounded-xl text-[#2d4a2d] placeholder-[#b0b0a8] focus:outline-none focus:ring-2 focus:ring-[#8aad6e] transition-all"
-              style={{
-                background: "#faf8f2",
-                border: "1.5px solid #c5b89a",
-              }}
-            />
-          </div>
-
-          {/* Email Field */}
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2">
-              <div
-                className="w-8 h-8 rounded-full flex items-center justify-center"
-                style={{ background: "#8aad6e" }}
-              >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect width="20" height="16" x="2" y="4" rx="2" />
-                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                </svg>
-              </div>
-            </span>
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="w-full pl-14 pr-4 py-3 rounded-xl text-[#2d4a2d] placeholder-[#b0b0a8] focus:outline-none focus:ring-2 focus:ring-[#8aad6e] transition-all"
-              style={{
-                background: "#faf8f2",
-                border: "1.5px solid #c5b89a",
-              }}
-            />
-          </div>
-
-          {/* Mobile Field */}
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2">
-              <div
-                className="w-8 h-8 rounded-full flex items-center justify-center"
-                style={{ background: "#8aad6e" }}
-              >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
-                  <path d="M12 18h.01" />
-                </svg>
-              </div>
-            </span>
-            <input
-              type="tel"
-              name="mobile"
-              placeholder="Mobile no."
-              value={formData.mobile}
-              onChange={handleChange}
-              required
-              className="w-full pl-14 pr-4 py-3 rounded-xl text-[#2d4a2d] placeholder-[#b0b0a8] focus:outline-none focus:ring-2 focus:ring-[#8aad6e] transition-all"
-              style={{
-                background: "#faf8f2",
-                border: "1.5px solid #c5b89a",
-              }}
-            />
-          </div>
-
-          {/* City Field */}
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2">
-              <div
-                className="w-8 h-8 rounded-full flex items-center justify-center"
-                style={{ background: "#8aad6e" }}
-              >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                  <circle cx="12" cy="10" r="3" />
-                </svg>
-              </div>
-            </span>
-            <input
-              type="text"
-              name="city"
-              placeholder="City"
-              value={formData.city}
-              onChange={handleChange}
-              required
-              className="w-full pl-14 pr-4 py-3 rounded-xl text-[#2d4a2d] placeholder-[#b0b0a8] focus:outline-none focus:ring-2 focus:ring-[#8aad6e] transition-all"
-              style={{
-                background: "#faf8f2",
-                border: "1.5px solid #c5b89a",
-              }}
-            />
-          </div>
-
-          {/* Sparkle lines above button */}
-          <div className="flex justify-end pr-4 -mb-1 pt-2">
-            <svg width="30" height="20" viewBox="0 0 30 20" fill="none" opacity="0.6">
-              <line x1="10" y1="10" x2="4" y2="4" stroke="#e8c55a" strokeWidth="1.5" strokeLinecap="round" />
-              <line x1="15" y1="8" x2="15" y2="2" stroke="#e8c55a" strokeWidth="1.5" strokeLinecap="round" />
-              <line x1="20" y1="10" x2="26" y2="4" stroke="#e8c55a" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
-          </div>
-
-          {/* Submit Button with outer border effect */}
-          <div
-            className="rounded-2xl p-2"
-            style={{ background: "#dce8d0" }}
-          >
-            <button
-              type="submit"
-              disabled={isSubmitting || submitted}
-              className="w-full text-white font-semibold py-2 px-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed"
-              style={{ background: "#2d4a2d" }}
-            >
-              {submitted ? (
-                <span>✓ Submitted!...</span>
-              ) : isSubmitting ? (
-                <span>Submitting...</span>
-              ) : (
-                <>
-                  <span>Book a Clarity Call</span>
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M5 12h14" />
-                    <path d="m12 5 7 7-7 7" />
+          <form onSubmit={handleSubmit} className="w-full mt-8" style={{ maxWidth: "480px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+              {/* Name */}
+              <div style={{ position: "relative" }}>
+                <span style={iconStyle("name")}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
                   </svg>
-                </>
-              )}
-            </button>
-          </div>
-        </form>
+                </span>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  onFocus={() => setFocusedField("name")}
+                  onBlur={() => setFocusedField(null)}
+                  required
+                  style={getInputStyle("name")}
+                />
+              </div>
+
+              {/* Email */}
+              <div style={{ position: "relative" }}>
+                <span style={iconStyle("email")}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect width="20" height="16" x="2" y="4" rx="2" />
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                  </svg>
+                </span>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  onFocus={() => setFocusedField("email")}
+                  onBlur={() => setFocusedField(null)}
+                  required
+                  style={getInputStyle("email")}
+                />
+              </div>
+
+              {/* Phone */}
+              <div style={{ position: "relative" }}>
+                <span style={iconStyle("mobile")}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                  </svg>
+                </span>
+                <input
+                  type="tel"
+                  name="mobile"
+                  placeholder="Phone"
+                  value={formData.mobile}
+                  onChange={handleChange}
+                  onFocus={() => setFocusedField("mobile")}
+                  onBlur={() => setFocusedField(null)}
+                  required
+                  style={getInputStyle("mobile")}
+                />
+              </div>
+
+              {/* Location */}
+              <div style={{ position: "relative" }}>
+                <span style={iconStyle("city")}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                </span>
+                <input
+                  type="text"
+                  name="city"
+                  placeholder="Location"
+                  value={formData.city}
+                  onChange={handleChange}
+                  onFocus={() => setFocusedField("city")}
+                  onBlur={() => setFocusedField(null)}
+                  required
+                  style={getInputStyle("city")}
+                />
+              </div>
+
+              {/* Submit */}
+              <button
+                type="submit"
+                disabled={isSubmitting || submitted}
+                className="btn-shine"
+                style={{
+                  width: "100%",
+                  padding: "18px 24px",
+                  borderRadius: "14px",
+                  fontSize: "1.2rem",
+                  fontFamily: "'Outfit', sans-serif",
+                  fontWeight: 700,
+                  color: "#FFFFFF",
+                  background: "linear-gradient(135deg, #EF9A7E 0%, #E88B6A 40%, #D4603E 100%)",
+                  border: "none",
+                  cursor: isSubmitting || submitted ? "not-allowed" : "pointer",
+                  opacity: isSubmitting || submitted ? 0.7 : 1,
+                  boxShadow: "0 8px 30px rgba(239,154,126,0.4), 0 2px 8px rgba(212,96,62,0.25)",
+                  transition: "all 0.3s ease",
+                  marginTop: "6px",
+                  letterSpacing: "0.03em",
+                }}
+              >
+                {submitted ? "Submitted! Redirecting..." : isSubmitting ? "Submitting..." : "Register For The Training Now"}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
