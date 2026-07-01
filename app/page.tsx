@@ -152,7 +152,7 @@ export default function ObtainPage() {
 
     try {
       const GOOGLE_SHEET_URL =
-        "https://script.google.com/macros/s/AKfycbzWAulQnmFFBl7lVE9pKJBxGQqn0wkjiecMT-SAQWmDbtRK4F8ZICTNFO7nFj6-5ihwhQ/exec";
+        "https://script.google.com/macros/s/AKfycbwxpW_GAnB0p9SyBpWmIw46r3_yt_xYLQFv5pH2X3r65TGiT-ILWHUHbp71nQIs9nAuMg/exec";
 
       const isConfigured = !GOOGLE_SHEET_URL.includes("YOUR_GOOGLE_SCRIPT_ID");
 
@@ -281,7 +281,7 @@ export default function ObtainPage() {
               color: "#362E69",
               fontFamily: "'Charm', cursive",
               fontWeight: 700,
-              fontSize: "5rem",
+              fontSize: "6rem",
               lineHeight: 1.1,
               textShadow: "0 4px 20px rgba(239,154,126,0.3)",
               letterSpacing: "0.06em",
@@ -291,17 +291,17 @@ export default function ObtainPage() {
             Uplift
           </h1>
 
-          <p className="text-center" style={{ color: "#362E69", fontFamily: "'Outfit', sans-serif", fontSize: "1.7rem", fontWeight: 400, lineHeight: 1.6, marginBottom: "0.6rem", ...revealStyle(1) }}>
+          <p className="text-center" style={{ color: "#362E69", fontFamily: "'Outfit', sans-serif", fontSize: "2.3rem", fontWeight: 500, lineHeight: 1.6, marginBottom: "0.6rem", ...revealStyle(1) }}>
             If you are a{" "}
             <span className="shimmer-text" style={{ fontWeight: 700 }}>founder, Doctor, CXOs, CEO</span>{" "}
             of your life.
           </p>
 
-          <p className="text-center" style={{ color: "#6B5B95", fontFamily: "'Outfit', sans-serif", fontSize: "2.1rem", fontWeight: 600, marginBottom: "1.5rem", ...revealStyle(2) }}>
+          <p className="text-center" style={{ color: "#6B5B95", fontFamily: "'Outfit', sans-serif", fontSize: "1.8rem", fontWeight: 600, marginBottom: "1.5rem", ...revealStyle(2) }}>
             This page is for you.
           </p>
 
-          <p className="text-center" style={{ color: "#362E69", fontFamily: "'Outfit', sans-serif", fontSize: "1.7rem", fontWeight: 700, lineHeight: 1.6, marginBottom: "1rem", ...revealStyle(3) }}>
+          <p className="text-center" style={{ color: "#362E69", fontFamily: "'Outfit', sans-serif",fontWeight: 700, fontSize: "1.7rem", lineHeight: 1.6, marginBottom: "1rem", ...revealStyle(3) }}>
             We help people resolve{" "}
             <span className="shimmer-text" style={{ fontWeight: 700 }}>Burnout</span>{" "}
             and{" "}
@@ -310,7 +310,7 @@ export default function ObtainPage() {
             <span className="shimmer-text" style={{ fontWeight: 700 }}>dream life</span>.
           </p>
 
-          <p className="text-center" style={{ color: "#362E69", fontFamily: "'Outfit', sans-serif", fontSize: "1.5rem", fontWeight: 350, ...revealStyle(4) }}>
+          <p className="text-center" style={{ color: "#362E69", fontFamily: "'Outfit', sans-serif", fontSize: "1.5rem", fontWeight: 300, ...revealStyle(4) }}>
             Risk free program. Money Back Guarantee.
           </p>
 
