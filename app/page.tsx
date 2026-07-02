@@ -293,7 +293,7 @@ export default function ObtainPage() {
 
           <p className="text-center" style={{ color: "#362E69", fontFamily: "'Outfit', sans-serif", fontSize: "2.3rem", fontWeight: 500, lineHeight: 1.6, marginBottom: "0.6rem", ...revealStyle(1) }}>
             If you are a{" "}
-            <span className="shimmer-text" style={{ fontWeight: 700 }}>founder, Doctor, CXOs, CEO</span>{" "}
+            <span className="shimmer-text" style={{ fontWeight: 700 }}>CXOs, founder, Doctor, CEO</span>{" "}
             of your life.
           </p>
 
