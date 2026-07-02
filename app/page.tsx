@@ -238,7 +238,7 @@ export default function ObtainPage() {
           100% { left: 200%; }
         }
         .shimmer-text {
-          background: linear-gradient(90deg, #EF9A7E 0%, #D4603E 40%, #EF9A7E 80%);
+          background: linear-gradient(90deg, #c8963e 0%, #e8c170 30%, #c8963e 50%, #e8c170 70%, #c8963e 100%);
           background-size: 200% auto;
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -426,6 +426,24 @@ export default function ObtainPage() {
               </button>
             </div>
           </form>
+
+          {/* Policy Links */}
+          <div className="mt-10 flex flex-wrap justify-center gap-4">
+            <a href="/privacy-policy" className="text-[#6B5B95] hover:text-[#4a2060] transition-colors text-sm font-medium underline underline-offset-2">
+              Privacy Policy
+            </a>
+            <span className="text-[#B4B1D5]">|</span>
+            <a href="/terms-and-conditions" className="text-[#6B5B95] hover:text-[#4a2060] transition-colors text-sm font-medium underline underline-offset-2">
+              Terms & Conditions
+            </a>
+            <span className="text-[#B4B1D5]">|</span>
+            <a href="/refund-policy" className="text-[#6B5B95] hover:text-[#4a2060] transition-colors text-sm font-medium underline underline-offset-2">
+              Refund Policy
+            </a>
+          </div>
+          <p className="text-center text-xs text-[#6B5B95]/50 mt-3">
+            © 2025 Dr. Vrushali Saraswat | Happiness Holistic Clinic. All Rights Reserved.
+          </p>
         </div>
       </div>
     </>
