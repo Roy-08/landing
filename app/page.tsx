@@ -293,7 +293,7 @@ export default function ObtainPage() {
 
           <p className="text-center" style={{ color: "#362E69", fontFamily: "'Outfit', sans-serif", fontSize: "2.3rem", fontWeight: 500, lineHeight: 1.6, marginBottom: "0.6rem", ...revealStyle(1) }}>
             If you are a{" "}
-            <span className="shimmer-text" style={{ fontWeight: 700 }}>CXOs, founder, Doctor, CEO</span>{" "}
+            <span className="shimmer-text" style={{ fontWeight: 700 }}>CXOs, founder, Doctor Or CEO</span>{" "}
             of your life.
           </p>
 
@@ -307,7 +307,7 @@ export default function ObtainPage() {
             and{" "}
             <span className="shimmer-text" style={{ fontWeight: 700 }}>manifest</span>{" "}
             their{" "}
-            <span className="shimmer-text" style={{ fontWeight: 700 }}>dream life</span>.
+            <span className="shimmer-text" style={{ fontWeight: 700 }}>your dream life</span>.
           </p>
 
           <p className="text-center" style={{ color: "#362E69", fontFamily: "'Outfit', sans-serif", fontSize: "1.5rem", fontWeight: 300, ...revealStyle(4) }}>
@@ -412,7 +412,7 @@ export default function ObtainPage() {
                   fontFamily: "'Outfit', sans-serif",
                   fontWeight: 700,
                   color: "#FFFFFF",
-                  background: "linear-gradient(135deg, #EF9A7E 0%, #E88B6A 40%, #D4603E 100%)",
+                  background: "linear-gradient(90deg, #c8963e 0%, #e8c170 30%, #c8963e 50%, #e8c170 70%, #c8963e 100%)",
                   border: "none",
                   cursor: isSubmitting || submitted ? "not-allowed" : "pointer",
                   opacity: isSubmitting || submitted ? 0.7 : 1,
