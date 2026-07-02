@@ -1,6 +1,10 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useRef } from "react";
 
 export default function Home() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
   const steps = [
     "Book a call and fill out the short application in detail",
     "We'll review your application and speak with you to see if you're a good fit",
@@ -9,171 +13,350 @@ export default function Home() {
     "Serious participants apply only. Application fees is non refundable",
   ];
 
-  const testimonials = [
-    { id: 1, title: "Client Testimonial 1", videoId: "LMvgJ7QYkUQ" },
-    { id: 2, title: "Client Testimonial 2", videoId: "f_0WiazKeMI" },
-  ];
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animationId: number;
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    const waveColors = [
+      { color: "rgba(239,154,126,", opacity: 0.22 },
+      { color: "rgba(180,177,213,", opacity: 0.2 },
+      { color: "rgba(200,180,255,", opacity: 0.18 },
+      { color: "rgba(255,200,180,", opacity: 0.2 },
+      { color: "rgba(160,140,200,", opacity: 0.16 },
+      { color: "rgba(239,154,126,", opacity: 0.18 },
+    ];
+
+    const waves = waveColors.map((wc, i) => ({
+      amplitude: Math.random() * 80 + 40,
+      frequency: Math.random() * 0.003 + 0.001,
+      speed: Math.random() * 0.008 + 0.003,
+      phase: Math.random() * Math.PI * 2,
+      yOffset: (canvas.height / (waveColors.length + 1)) * (i + 1),
+      color: wc.color,
+      opacity: wc.opacity,
+      thickness: Math.random() * 60 + 30,
+    }));
+
+    let time = 0;
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      time += 1;
+
+      waves.forEach((w) => {
+        ctx.beginPath();
+        ctx.moveTo(0, w.yOffset + Math.sin(w.phase + time * w.speed) * w.amplitude);
+
+        for (let x = 0; x <= canvas.width; x += 4) {
+          const y =
+            w.yOffset +
+            Math.sin(w.phase + x * w.frequency + time * w.speed) * w.amplitude +
+            Math.sin(w.phase * 0.5 + x * w.frequency * 1.5 + time * w.speed * 0.7) * (w.amplitude * 0.3);
+          ctx.lineTo(x, y);
+        }
+
+        ctx.lineTo(canvas.width, canvas.height);
+        ctx.lineTo(0, canvas.height);
+        ctx.closePath();
+
+        const gradient = ctx.createLinearGradient(0, w.yOffset - w.amplitude, 0, w.yOffset + w.amplitude + w.thickness);
+        gradient.addColorStop(0, w.color + "0)");
+        gradient.addColorStop(0.3, w.color + w.opacity + ")");
+        gradient.addColorStop(0.6, w.color + (w.opacity * 0.5) + ")");
+        gradient.addColorStop(1, w.color + "0)");
+
+        ctx.fillStyle = gradient;
+        ctx.fill();
+      });
+
+      for (let i = 0; i < 5; i++) {
+        const orbX = canvas.width * (0.1 + i * 0.2) + Math.sin(time * 0.005 + i * 1.2) * 60;
+        const orbY = canvas.height * (0.2 + i * 0.15) + Math.cos(time * 0.004 + i * 0.8) * 40;
+        const orbR = 100 + Math.sin(time * 0.003 + i) * 30;
+
+        const orbGrad = ctx.createRadialGradient(orbX, orbY, 0, orbX, orbY, orbR);
+        const orbColorsList = [
+          "rgba(239,154,126,",
+          "rgba(180,177,213,",
+          "rgba(200,180,255,",
+          "rgba(255,200,180,",
+          "rgba(160,140,200,",
+        ];
+        const c = orbColorsList[i % orbColorsList.length];
+        orbGrad.addColorStop(0, c + "0.12)");
+        orbGrad.addColorStop(0.5, c + "0.06)");
+        orbGrad.addColorStop(1, c + "0)");
+
+        ctx.beginPath();
+        ctx.arc(orbX, orbY, orbR, 0, Math.PI * 2);
+        ctx.fillStyle = orbGrad;
+        ctx.fill();
+      }
+
+      animationId = requestAnimationFrame(animate);
+    };
+    animate();
+
+    return () => {
+      cancelAnimationFrame(animationId);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
 
   return (
-    <div className="min-h-screen">
-      {/* HEADER */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b border-purple-100/50">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <span className="text-lg font-semibold text-[#4a2060]">
-            Happiness Holistic Clinic
-          </span>
-          <nav className="hidden md:flex items-center gap-8">
-            <a href="#home" className="text-[#4a2060] font-medium hover:text-[#c8963e] transition-colors">Home</a>
-            <a href="#about" className="text-[#4a2060] font-medium hover:text-[#c8963e] transition-colors">About</a>
-            <a href="#testimonials" className="text-[#4a2060] font-medium hover:text-[#c8963e] transition-colors">Testimonials</a>
-            <a href="#get-started" className="text-[#4a2060] font-medium hover:text-[#c8963e] transition-colors">Get Started</a>
-          </nav>
-          <Image src="/logo.png" alt="Dr. Vrushali Logo" width={40} height={40} />
-        </div>
-      </header>
+    <>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Outfit:wght@300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap"
+        rel="stylesheet"
+      />
 
-      {/* HERO SECTION */}
-      <section
-        id="home"
-        className="min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20"
-        style={{ background: "linear-gradient(180deg, #e8dff5 0%, #fce8d5 100%)" }}
+      <style>{`
+        @keyframes shimmerGold {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
+        }
+        @keyframes btnShine {
+          0% { left: -100%; }
+          100% { left: 200%; }
+        }
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); box-shadow: 0 8px 30px rgba(200,150,62,0.4); }
+          50% { transform: scale(1.02); box-shadow: 0 12px 40px rgba(200,150,62,0.6); }
+        }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .shimmer-gold {
+          background: linear-gradient(90deg, #c8963e 0%, #e8c170 30%, #c8963e 50%, #e8c170 70%, #c8963e 100%);
+          background-size: 200% auto;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          animation: shimmerGold 4s linear infinite;
+        }
+        .btn-shine { position: relative; overflow: hidden; }
+        .btn-shine::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 50%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+          animation: btnShine 3s ease-in-out infinite;
+        }
+        .pulse-btn {
+          animation: pulse 2.5s ease-in-out infinite;
+        }
+        .fade-in-1 { animation: fadeInUp 0.8s ease-out forwards; }
+        .fade-in-2 { animation: fadeInUp 0.8s ease-out 0.2s forwards; opacity: 0; }
+        .fade-in-3 { animation: fadeInUp 0.8s ease-out 0.4s forwards; opacity: 0; }
+      `}</style>
+
+      <div
+        className="w-full min-h-screen relative"
+        style={{
+          background:
+            "linear-gradient(150deg, #FDF6F0 0%, #F9ECF5 20%, #F0E8FA 40%, #EAE2F8 55%, #E8E0F5 70%, #F5EAF2 85%, #FDF5EE 100%)",
+        }}
       >
-        
-        <div className="max-w-3xl mx-auto space-y-6">
-          <h1 className="text-xl md:text-2xl lg:text-4xl font-bold text-[#c8963e] leading-tight">
-            Hi, I am Dr. Vrushali Saraswat
-          </h1>
-          <h2 className="text-xl md:text-2xl font-semibold text-[#4a2060]">
-            Doctor by Profession, Healer by Choice!
-          </h2>
-          <p className="text-base md:text-lg text-[#4a2060]/80 max-w-2xl mx-auto leading-relaxed">
-            I help accomplished professionals master emotional well-being, purpose, and happiness without slowing down their ambition.
-          </p>
-          <div className="w-24 h-px bg-[#4a2060]/20 mx-auto my-4"></div>
+        {/* Animated Canvas Background */}
+        <canvas
+          ref={canvasRef}
+          className="fixed inset-0 w-full h-full pointer-events-none"
+          style={{ zIndex: 0 }}
+        />
+
+        {/* HERO SECTION */}
+        <section className="relative z-10 flex flex-col items-center justify-center text-center px-6 pt-10 pb-8">
+          <div className="max-w-4xl mx-auto space-y-5">
+            <h1
+              className="fade-in-1"
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontWeight: 900,
+                fontSize: "clamp(2rem, 5vw, 2.4rem)",
+                lineHeight: 1.2,
+                color: "#4a2060",
+                letterSpacing: "0.02em",
+              }}
+            >
+              Hi, I am{" "}
+              <span className="shimmer-gold">Dr. Vrushali Saraswat</span>
+            </h1>
+
+            <h2
+              className="fade-in-2"
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontWeight: 700,
+                fontSize: "clamp(1.4rem, 3.5vw, 2.4rem)",
+                lineHeight: 1.3,
+                color: "#6B3A8A",
+                fontStyle: "italic",
+                letterSpacing: "0.03em",
+              }}
+            >
+              Doctor by Profession, Healer by Choice!
+            </h2>
+
+            <p
+              className="fade-in-3"
+              style={{
+                fontFamily: "'Outfit', sans-serif",
+                fontWeight: 600,
+                fontSize: "clamp(1rem, 2vw, 1.3rem)",
+                lineHeight: 1.7,
+                color: "#4a2060",
+                maxWidth: "600px",
+                marginLeft: "auto",
+                marginRight: "auto",
+              }}
+            >
+              I help accomplished professionals master{" "}
+              <span style={{ color: "#c8963e", fontWeight: 800 }}>emotional well-being</span>,{" "}
+              <span style={{ color: "#c8963e", fontWeight: 800 }}>purpose</span>, and{" "}
+              <span style={{ color: "#c8963e", fontWeight: 800 }}>happiness</span>{" "}
+              without slowing down their ambition.
+            </p>
+
+            <div
+              className="w-32 h-1 mx-auto"
+              style={{
+                background: "linear-gradient(90deg, transparent, #c8963e, transparent)",
+                borderRadius: "2px",
+              }}
+            ></div>
+          </div>
+        </section>
+
+        {/* VIDEO SECTION */}
+        <section className="relative z-10 px-6 pb-8">
+          <div className="max-w-4xl mx-auto">
+            <div
+              className="rounded-2xl overflow-hidden shadow-2xl"
+              style={{
+                boxShadow:
+                  "0 20px 60px rgba(74,32,96,0.2), 0 8px 24px rgba(239,154,126,0.15)",
+              }}
+            >
+              <iframe
+                src="https://drive.google.com/file/d/1-lUf71a1T2ZIXWj5q4B2WNptDaaiE6uQ/preview"
+                allow="autoplay"
+                allowFullScreen
+                className="w-full block"
+                style={{
+                  borderRadius: "16px",
+                  aspectRatio: "16/9",
+                  border: "none",
+                }}
+              ></iframe>
+            </div>
+          </div>
+        </section>
+
+        {/* APPLY NOW BUTTON */}
+        <section className="relative z-10 px-6 pb-12 text-center">
           <a
-            href="#get-started"
-            className="inline-block bg-[#c8963e] text-white font-semibold px-8 py-4 rounded-full shadow-lg hover:bg-[#b5842f] hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
+            href="https://pages.razorpay.com/pl_QzeWz5qOyKRAu3/view"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-shine pulse-btn inline-block bg-[#c8963e] text-white font-semibold px-10 py-4 rounded-full shadow-lg hover:bg-[#b5842f] hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
+            style={{ fontSize: "1.2rem", letterSpacing: "0.03em" }}
           >
             Apply Now
           </a>
-        </div>
-      </section>
+        </section>
 
-      {/* ABOUT SECTION */}
-      <section id="about" className="py-20 px-6" style={{ background: "#fdf0e4" }}>
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-            <div className="flex justify-center lg:justify-start">
-              <Image
-                src="/dr_vrushali.jpg"
-                alt="Dr. Vrushali Saraswat"
-                width={500}
-                height={600}
-                className="rounded-2xl shadow-lg w-full max-w-md object-cover"
-              />
+        {/* HOW TO GET STARTED SECTION */}
+        <section className="relative z-10 py-16 px-6">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontWeight: 900,
+                fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+                color: "#c8963e",
+                marginBottom: "3rem",
+                letterSpacing: "0.02em",
+              }}
+            >
+              How To Get Started
+            </h2>
+            <div className="space-y-5 text-left max-w-xl mx-auto mb-12">
+              {steps.map((step, i) => (
+                <div key={i} className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-7 h-7 rounded-full bg-[#c8963e] flex items-center justify-center mt-0.5">
+                    <svg
+                      className="w-4 h-4 text-white"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={3}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <p className="text-[#4a2060] font-medium text-base leading-relaxed">
+                    {step}
+                  </p>
+                </div>
+              ))}
             </div>
-            <div className="space-y-6">
-              <h2 className="text-3xl md:text-4xl font-bold text-[#c8963e]">
-                About Dr. Vrushali Saraswat
-              </h2>
-              <h3 className="text-xl font-semibold text-[#4a2060]">
-                Doctor by Profession. Healer by Choice.
-              </h3>
-              <div className="space-y-4 text-[#3d3d3d] leading-relaxed">
-                <p>For over 25 years, I have been helping people heal not just physically, but emotionally, mentally, and spiritually.</p>
-                <p>I am Dr. Vrushali Saraswat, a Homoeopathic Physician, Happiness Coach, Author, and Speaker who has impacted more than 38,000 lives across 20+ countries through consultations, workshops, seminars, and transformational programs.</p>
-                <p>Over the years, I noticed a common pattern. Many people looked successful on the outside but felt disconnected, exhausted, and unfulfilled on the inside. They had achieved career milestones, built families, and earned respect yet struggled to experience genuine happiness, peace, and meaning.</p>
-                <p>That realization led me to create <span className="font-semibold text-[#c8963e]">UPLIFT</span>.</p>
-                <p>UPLIFT is a transformational journey designed to help high-performing individuals reconnect with themselves, overcome burnout, build emotional resilience, and create a life that feels as good on the inside as it looks on the outside.</p>
-                <p>My work blends the best of medical science, psychology, neuroscience, emotional wellness, and timeless wisdom, creating practical tools that lead to lasting change not temporary motivation.</p>
-                <p>Whether I am working with entrepreneurs, doctors, corporate leaders, educators, or individuals seeking a deeper sense of purpose, my mission remains the same:</p>
-                <p className="font-semibold text-[#4a2060] italic">Mission: To help people stop merely surviving and start living with clarity, confidence, joy, and inner freedom.</p>
-                <p>Because true success is not just about what you achieve. It&apos;s about who you become while achieving it.</p>
-                <p>Through my 12-week UPLIFT Program, I help founders, doctors, CXOs, and professionals overcome burnout, regain clarity, strengthen relationships, and build a life that feels as good on the inside as it looks on the outside.</p>
-              </div>
+            <a
+              href="https://pages.razorpay.com/pl_QzeWz5qOyKRAu3/view"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-[#c8963e] text-white font-semibold px-8 py-4 rounded-full shadow-lg hover:bg-[#b5842f] transition-all duration-300 mb-12"
+            >
+              BOOK CLARITY CALL
+            </a>
+            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 max-w-lg mx-auto">
+              <p className="text-[#4a2060] font-bold text-lg mb-2">
+                Limited slots left!
+              </p>
+              <p className="text-[#4a2060]">
+                Any Questions? Email Us To:{" "}
+                <a
+                  href="mailto:heal@drvrushali.com"
+                  className="text-[#c8963e] font-semibold hover:underline"
+                >
+                  heal@drvrushali.com
+                </a>
+              </p>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* TESTIMONIALS SECTION */}
-      <section
-        id="testimonials"
-        className="py-20 px-6"
-        style={{ background: "linear-gradient(180deg, #e8dff5 0%, #fce8d5 100%)" }}
-      >
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#4a2060] text-center mb-12">
-            Testimonials
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {testimonials.map((t) => (
-              <div key={t.id} className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <div className="relative aspect-video">
-                  <iframe
-                    src={`https://www.youtube.com/embed/${t.videoId}`}
-                    title={t.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="w-full h-full"
-                  ></iframe>
-                </div>
-                <div className="bg-[#4a2060] py-3 px-4">
-                  <p className="text-white text-sm font-medium text-center">{t.title}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* HOW TO GET STARTED SECTION */}
-      <section
-        id="get-started"
-        className="py-20 px-6"
-        style={{ background: "linear-gradient(180deg, #fce8d5 0%, #e8dff5 100%)" }}
-      >
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#c8963e] mb-12">
-            How To Get Started
-          </h2>
-          <div className="space-y-5 text-left max-w-xl mx-auto mb-12">
-            {steps.map((step, i) => (
-              <div key={i} className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-7 h-7 rounded-full bg-[#c8963e] flex items-center justify-center mt-0.5">
-                  <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <p className="text-[#4a2060] font-medium text-base leading-relaxed">{step}</p>
-              </div>
-            ))}
-          </div>
-          <a
-            href="mailto:heal@drvrushali.com"
-            className="inline-block bg-[#c8963e] text-white font-semibold px-8 py-4 rounded-full shadow-lg hover:bg-[#b5842f] transition-all duration-300 mb-12"
-          >
-            BOOK CLARITY CALL
-          </a>
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 max-w-lg mx-auto">
-            <p className="text-[#4a2060] font-bold text-lg mb-2">Limited slots left!</p>
-            <p className="text-[#4a2060]">
-              Any Questions? Email Us To:{" "}
-              <a href="mailto:heal@drvrushali.com" className="text-[#c8963e] font-semibold hover:underline">
-                heal@drvrushali.com
-              </a>
+        {/* FOOTER */}
+        <footer className="relative z-10 bg-[#4a2060] text-white py-8 px-6">
+          <div className="max-w-7xl mx-auto text-center">
+            <p className="text-sm opacity-80">
+              © 2025 Dr. Vrushali Saraswat | Happiness Holistic Clinic. All
+              rights reserved.
+            </p>
+            <p className="text-sm opacity-60 mt-2">
+              Contact: heal@drvrushali.com
             </p>
           </div>
-        </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="bg-[#4a2060] text-white py-8 px-6">
-        <div className="max-w-7xl mx-auto text-center">
-          <p className="text-sm opacity-80">© 2025 Dr. Vrushali Saraswat | Happiness Holistic Clinic. All rights reserved.</p>
-          <p className="text-sm opacity-60 mt-2">Contact: heal@drvrushali.com</p>
-        </div>
-      </footer>
-    </div>
+        </footer>
+      </div>
+    </>
   );
 }
