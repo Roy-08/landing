@@ -11,6 +11,7 @@ export default function Home() {
     "Limited members will be accepted",
     "The Batch will starts this Month",
     "Serious participants apply only. Application fees is non refundable",
+    "Limited slots left!",
   ];
 
   useEffect(() => {
@@ -253,7 +254,7 @@ export default function Home() {
               }}
             >
               <iframe
-                src="https://drive.google.com/file/d/1-lUf71a1T2ZIXWj5q4B2WNptDaaiE6uQ/preview"
+                src="https://drive.google.com/file/d/1vFtJPQwubJmvf-TZB2w0Ise8MsjMZ_um/preview"
                 allow="autoplay"
                 allowFullScreen
                 className="w-full block"
@@ -276,13 +277,13 @@ export default function Home() {
             className="btn-shine pulse-btn inline-block bg-[#c8963e] text-white font-semibold px-10 py-4 rounded-full shadow-lg hover:bg-[#b5842f] hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
             style={{ fontSize: "1.2rem", letterSpacing: "0.03em" }}
           >
-            Apply Now
+            BOOK CLARITY CALL
           </a>
         </section>
 
         {/* HOW TO GET STARTED SECTION */}
-        <section className="relative z-10 py-16 px-6">
-          <div className="max-w-3xl mx-auto text-center">
+        <section className="relative z-10 py-0 px-2">
+          <div className="max-w-5xl mx-auto text-center">
             <h2
               style={{
                 fontFamily: "'Playfair Display', serif",
@@ -295,51 +296,57 @@ export default function Home() {
             >
               How To Get Started
             </h2>
-            <div className="space-y-5 text-left max-w-xl mx-auto mb-12">
-              {steps.map((step, i) => (
-                <div key={i} className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-7 h-7 rounded-full bg-[#c8963e] flex items-center justify-center mt-0.5">
-                    <svg
-                      className="w-4 h-4 text-white"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={3}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-5 text-left max-w-4xl mx-auto mb-12">
+              {/* Left column - first 3 items */}
+              <div className="space-y-5">
+                {steps.slice(0, 3).map((step, i) => (
+                  <div key={i} className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-[#c8963e] flex items-center justify-center mt-0.5">
+                      <svg
+                        className="w-4 h-4 text-white"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={3}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </div>
+                    <p className="text-[#4a2060] font-medium text-base leading-relaxed">
+                      {step}
+                    </p>
                   </div>
-                  <p className="text-[#4a2060] font-medium text-base leading-relaxed">
-                    {step}
-                  </p>
-                </div>
-              ))}
-            </div>
-            <a
-              href="https://pages.razorpay.com/pl_QzeWz5qOyKRAu3/view"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-[#c8963e] text-white font-semibold px-8 py-4 rounded-full shadow-lg hover:bg-[#b5842f] transition-all duration-300 mb-12"
-            >
-              BOOK CLARITY CALL
-            </a>
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 max-w-lg mx-auto">
-              <p className="text-[#4a2060] font-bold text-lg mb-2">
-                Limited slots left!
-              </p>
-              <p className="text-[#4a2060]">
-                Any Questions? Email Us To:{" "}
-                <a
-                  href="mailto:heal@drvrushali.com"
-                  className="text-[#c8963e] font-semibold hover:underline"
-                >
-                  heal@drvrushali.com
-                </a>
-              </p>
+                ))}
+              </div>
+              {/* Right column - last 3 items */}
+              <div className="space-y-5">
+                {steps.slice(3, 6).map((step, i) => (
+                  <div key={i + 3} className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-[#c8963e] flex items-center justify-center mt-0.5">
+                      <svg
+                        className="w-4 h-4 text-white"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={3}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </div>
+                    <p className="text-[#4a2060] font-medium text-base leading-relaxed">
+                      {step}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -347,6 +354,19 @@ export default function Home() {
         {/* FOOTER */}
         <footer className="relative z-10 bg-[#4a2060] text-white py-8 px-6">
           <div className="max-w-7xl mx-auto text-center">
+            <div className="flex flex-wrap justify-center gap-4 mb-4">
+              <a href="/privacy-policy" className="text-white/80 hover:text-[#c8963e] transition-colors text-sm font-medium">
+                Privacy Policy
+              </a>
+              <span className="text-white/40">|</span>
+              <a href="/terms-and-conditions" className="text-white/80 hover:text-[#c8963e] transition-colors text-sm font-medium">
+                Terms & Conditions
+              </a>
+              <span className="text-white/40">|</span>
+              <a href="/refund-policy" className="text-white/80 hover:text-[#c8963e] transition-colors text-sm font-medium">
+                Refund Policy
+              </a>
+            </div>
             <p className="text-sm opacity-80">
               © 2025 Dr. Vrushali Saraswat | Happiness Holistic Clinic. All
               rights reserved.
