@@ -181,21 +181,21 @@ export default function Home() {
         />
 
         {/* HERO SECTION */}
-        <section className="relative z-10 flex flex-col items-center justify-center text-center px-6 pt-10 pb-8">
-          <div className="max-w-4xl mx-auto space-y-5">
+        <section className="relative z-10 flex flex-col items-center justify-center text-center px-4 sm:px-6 pt-8 sm:pt-10 pb-6 sm:pb-8">
+          <div className="max-w-4xl mx-auto space-y-4 sm:space-y-5">
             <h1
               className="fade-in-1"
               style={{
                 fontFamily: "'Playfair Display', serif",
                 fontWeight: 900,
-                fontSize: "clamp(2rem, 5vw, 2.4rem)",
+                fontSize: "clamp(1.6rem, 5vw, 2.4rem)",
                 lineHeight: 1.2,
                 color: "#4a2060",
                 letterSpacing: "0.02em",
               }}
             >
               Hi, I am{" "}
-              <span className="shimmer-gold">Dr. Vrushali Saraswat</span>
+              <span className="shimmer-gold whitespace-nowrap">Dr. Vrushali Saraswat</span>
             </h1>
 
             <h2
@@ -203,7 +203,7 @@ export default function Home() {
               style={{
                 fontFamily: "'Cormorant Garamond', serif",
                 fontWeight: 700,
-                fontSize: "clamp(1.4rem, 3.5vw, 2.4rem)",
+                fontSize: "clamp(1.2rem, 3.5vw, 2.4rem)",
                 lineHeight: 1.3,
                 color: "#6B3A8A",
                 fontStyle: "italic",
@@ -218,7 +218,7 @@ export default function Home() {
               style={{
                 fontFamily: "'Outfit', sans-serif",
                 fontWeight: 600,
-                fontSize: "clamp(1rem, 2vw, 1.3rem)",
+                fontSize: "clamp(0.9rem, 2vw, 1.3rem)",
                 lineHeight: 1.7,
                 color: "#4a2060",
                 maxWidth: "600px",
@@ -234,7 +234,7 @@ export default function Home() {
             </p>
 
             <div
-              className="w-32 h-1 mx-auto"
+              className="w-24 sm:w-32 h-1 mx-auto"
               style={{
                 background: "linear-gradient(90deg, transparent, #c8963e, transparent)",
                 borderRadius: "2px",
@@ -244,66 +244,72 @@ export default function Home() {
         </section>
 
         {/* VIDEO SECTION */}
-        <section className="relative z-10 px-6 pb-8">
+        <section className="relative z-10 px-3 sm:px-6 pb-6 sm:pb-8">
           <div className="max-w-4xl mx-auto">
             <div
-              className="rounded-2xl overflow-hidden shadow-2xl"
+              className="relative w-full overflow-hidden rounded-xl sm:rounded-2xl"
               style={{
+                paddingTop: "56.25%",
                 boxShadow:
                   "0 20px 60px rgba(74,32,96,0.2), 0 8px 24px rgba(239,154,126,0.15)",
               }}
             >
-              <iframe
-                src="https://drive.google.com/file/d/1vFtJPQwubJmvf-TZB2w0Ise8MsjMZ_um/preview"
-                allow="autoplay"
-                allowFullScreen
-                className="w-full block"
+              <video
+                src="/uplift.mp4"
+                autoPlay
+                muted
+                loop
+                controls
+                playsInline
+                preload="auto"
+                className="absolute top-0 left-0 w-full h-full object-cover"
                 style={{
-                  borderRadius: "16px",
-                  aspectRatio: "16/9",
-                  border: "none",
+                  borderRadius: "12px",
+                  backgroundColor: "#000",
                 }}
-              ></iframe>
+              >
+                Your browser does not support the video tag.
+              </video>
             </div>
           </div>
         </section>
 
         {/* APPLY NOW BUTTON */}
-        <section className="relative z-10 px-6 pb-12 text-center">
+        <section className="relative z-10 px-4 sm:px-6 pb-8 sm:pb-12 text-center">
           <a
             href="https://pages.razorpay.com/pl_QzeWz5qOyKRAu3/view"
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-shine pulse-btn inline-block bg-[#c8963e] text-white font-semibold px-10 py-4 rounded-full shadow-lg hover:bg-[#b5842f] hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
-            style={{ fontSize: "1.2rem", letterSpacing: "0.03em" }}
+            className="btn-shine pulse-btn inline-block bg-[#c8963e] text-white font-semibold px-7 sm:px-10 py-3 sm:py-4 rounded-full shadow-lg hover:bg-[#b5842f] hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
+            style={{ fontSize: "clamp(0.95rem, 2.5vw, 1.2rem)", letterSpacing: "0.03em" }}
           >
             BOOK CLARITY CALL
           </a>
         </section>
 
         {/* HOW TO GET STARTED SECTION */}
-        <section className="relative z-10 py-0 px-2">
+        <section className="relative z-10 py-0 px-3 sm:px-4">
           <div className="max-w-5xl mx-auto text-center">
             <h2
               style={{
                 fontFamily: "'Playfair Display', serif",
                 fontWeight: 900,
-                fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+                fontSize: "clamp(1.5rem, 4vw, 2.5rem)",
                 color: "#c8963e",
-                marginBottom: "3rem",
+                marginBottom: "2rem",
                 letterSpacing: "0.02em",
               }}
             >
               How To Get Started
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-5 text-left max-w-4xl mx-auto mb-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 sm:gap-x-12 gap-y-4 sm:gap-y-5 text-left max-w-4xl mx-auto mb-8 sm:mb-12">
               {/* Left column - first 3 items */}
-              <div className="space-y-5">
+              <div className="space-y-4 sm:space-y-5">
                 {steps.slice(0, 3).map((step, i) => (
-                  <div key={i} className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-[#c8963e] flex items-center justify-center mt-0.5">
+                  <div key={i} className="flex items-start gap-3 sm:gap-4">
+                    <div className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#c8963e] flex items-center justify-center mt-0.5">
                       <svg
-                        className="w-4 h-4 text-white"
+                        className="w-3 h-3 sm:w-4 sm:h-4 text-white"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -316,19 +322,19 @@ export default function Home() {
                         />
                       </svg>
                     </div>
-                    <p className="text-[#4a2060] font-medium text-base leading-relaxed">
+                    <p className="text-[#4a2060] font-medium text-sm sm:text-base leading-relaxed">
                       {step}
                     </p>
                   </div>
                 ))}
               </div>
               {/* Right column - last 3 items */}
-              <div className="space-y-5">
+              <div className="space-y-4 sm:space-y-5">
                 {steps.slice(3, 6).map((step, i) => (
-                  <div key={i + 3} className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-[#c8963e] flex items-center justify-center mt-0.5">
+                  <div key={i + 3} className="flex items-start gap-3 sm:gap-4">
+                    <div className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#c8963e] flex items-center justify-center mt-0.5">
                       <svg
-                        className="w-4 h-4 text-white"
+                        className="w-3 h-3 sm:w-4 sm:h-4 text-white"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -341,7 +347,7 @@ export default function Home() {
                         />
                       </svg>
                     </div>
-                    <p className="text-[#4a2060] font-medium text-base leading-relaxed">
+                    <p className="text-[#4a2060] font-medium text-sm sm:text-base leading-relaxed">
                       {step}
                     </p>
                   </div>
@@ -352,26 +358,25 @@ export default function Home() {
         </section>
 
         {/* FOOTER */}
-        <footer className="relative z-10 bg-[#4a2060] text-white py-8 px-6">
+        <footer className="relative z-10 bg-[#4a2060] text-white py-6 sm:py-8 px-4 sm:px-6">
           <div className="max-w-7xl mx-auto text-center">
-            <div className="flex flex-wrap justify-center gap-4 mb-4">
-              <a href="/privacy-policy" className="text-white/80 hover:text-[#c8963e] transition-colors text-sm font-medium">
+            <div className="flex flex-nowrap justify-center items-center gap-2 sm:gap-4 mb-4">
+              <a href="/privacy-policy" className="text-white/80 hover:text-[#c8963e] transition-colors text-[10px] sm:text-sm font-medium whitespace-nowrap">
                 Privacy Policy
               </a>
-              <span className="text-white/40">|</span>
-              <a href="/terms-and-conditions" className="text-white/80 hover:text-[#c8963e] transition-colors text-sm font-medium">
+              <span className="text-white/40 text-[10px] sm:text-sm">|</span>
+              <a href="/terms-and-conditions" className="text-white/80 hover:text-[#c8963e] transition-colors text-[10px] sm:text-sm font-medium whitespace-nowrap">
                 Terms & Conditions
               </a>
-              <span className="text-white/40">|</span>
-              <a href="/refund-policy" className="text-white/80 hover:text-[#c8963e] transition-colors text-sm font-medium">
+              <span className="text-white/40 text-[10px] sm:text-sm">|</span>
+              <a href="/refund-policy" className="text-white/80 hover:text-[#c8963e] transition-colors text-[10px] sm:text-sm font-medium whitespace-nowrap">
                 Refund Policy
               </a>
             </div>
-            <p className="text-sm opacity-80">
-              © 2025 Dr. Vrushali Saraswat | Happiness Holistic Clinic. All
-              rights reserved.
+            <p className="text-[10px] sm:text-sm opacity-80 whitespace-nowrap">
+              © 2025 Dr. Vrushali Saraswat | Happiness Holistic Clinic. All rights reserved.
             </p>
-            <p className="text-sm opacity-60 mt-2">
+            <p className="text-[10px] sm:text-sm opacity-60 mt-2">
               Contact: heal@drvrushali.com
             </p>
           </div>
