@@ -58,8 +58,8 @@ export default function RefundPolicyPage() {
               looks on the outside.
             </p>
             <p>
-              Our services include coaching sessions, consulting, recorded modules, live sessions, community access,
-              and personalized guidance. The recommendations made are purely advisory and the Client must exercise
+              Our services include group coaching sessions, consulting,  live sessions and community access.
+              The recommendations made are purely advisory and the Client must exercise
               independent judgment about the application of those recommendations.
             </p>
 
@@ -71,13 +71,13 @@ export default function RefundPolicyPage() {
                 building, and personal transformation during the duration of the program.
               </li>
               <li>
-                Weekly modules and recordings to assist you in implementing specific practices throughout the week.
+                Weekly modules to assist you in implementing specific practices throughout the week.
               </li>
               <li>
                 Live group sessions and community support for ongoing guidance and accountability.
               </li>
               <li>
-                Personalized dashboard and progress tracking throughout the program journey.
+                Personalized reports and progress tracking throughout the program journey.
               </li>
             </ul>
 
