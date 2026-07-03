@@ -192,9 +192,9 @@ export default function ObtainPage() {
     const isFocused = focusedField === fieldName;
     return {
       width: "100%",
-      padding: "16px 20px 16px 48px",
+      padding: "14px 18px 14px 44px",
       borderRadius: "14px",
-      fontSize: "1.1rem",
+      fontSize: "1rem",
       fontFamily: "'Outfit', sans-serif",
       fontWeight: 500,
       color: "#362E69",
@@ -213,7 +213,7 @@ export default function ObtainPage() {
     const isFocused = focusedField === fieldName;
     return {
       position: "absolute",
-      left: "16px",
+      left: "14px",
       top: "50%",
       transform: "translateY(-50%)",
       color: isFocused ? "#6B5B95" : "#B4B1D5",
@@ -273,7 +273,7 @@ export default function ObtainPage() {
           style={{ zIndex: 0 }}
         />
 
-        <div className="relative z-10 w-full max-w-5xl mx-auto px-12 pt-12 pb-14 flex flex-col items-center">
+        <div className="relative z-10 w-full max-w-5xl mx-auto px-5 sm:px-8 md:px-12 pt-8 sm:pt-12 pb-10 sm:pb-14 flex flex-col items-center">
           {/* Uplift Title */}
           <h1
             className="text-center"
@@ -281,45 +281,81 @@ export default function ObtainPage() {
               color: "#362E69",
               fontFamily: "'Charm', cursive",
               fontWeight: 700,
-              fontSize: "6rem",
               lineHeight: 1.1,
               textShadow: "0 4px 20px rgba(239,154,126,0.3)",
               letterSpacing: "0.06em",
-              marginBottom: "2.5rem",
+              marginBottom: "1.5rem",
             }}
           >
-            Uplift
+            <span className="block text-[3.2rem] sm:text-[4.5rem] md:text-[6rem]">Uplift</span>
           </h1>
 
-          <p className="text-center" style={{ color: "#362E69", fontFamily: "'Outfit', sans-serif", fontSize: "2.3rem", fontWeight: 500, lineHeight: 1.6, marginBottom: "0.6rem", ...revealStyle(1) }}>
+          <p
+            className="text-center text-[1.3rem] sm:text-[1.8rem] md:text-[2.3rem]"
+            style={{
+              color: "#362E69",
+              fontFamily: "'Outfit', sans-serif",
+              fontWeight: 500,
+              lineHeight: 1.5,
+              marginBottom: "0.6rem",
+              ...revealStyle(1),
+            }}
+          >
             If you are a{" "}
             <span className="shimmer-text" style={{ fontWeight: 700 }}>CXOs, founder, Doctor Or CEO</span>{" "}
             of your life.
           </p>
 
-          <p className="text-center" style={{ color: "#6B5B95", fontFamily: "'Outfit', sans-serif", fontSize: "1.8rem", fontWeight: 600, marginBottom: "1.5rem", ...revealStyle(2) }}>
+          <p
+            className="text-center text-[1.2rem] sm:text-[1.5rem] md:text-[1.8rem]"
+            style={{
+              color: "#6B5B95",
+              fontFamily: "'Outfit', sans-serif",
+              fontWeight: 600,
+              marginBottom: "1.2rem",
+              ...revealStyle(2),
+            }}
+          >
             This page is for you.
           </p>
 
-          <p className="text-center" style={{ color: "#362E69", fontFamily: "'Outfit', sans-serif",fontWeight: 700, fontSize: "1.7rem", lineHeight: 1.6, marginBottom: "1rem", ...revealStyle(3) }}>
+          <p
+            className="text-center text-[1.1rem] sm:text-[1.4rem] md:text-[1.7rem]"
+            style={{
+              color: "#362E69",
+              fontFamily: "'Outfit', sans-serif",
+              fontWeight: 700,
+              lineHeight: 1.5,
+              marginBottom: "0.8rem",
+              ...revealStyle(3),
+            }}
+          >
             We help people resolve{" "}
             <span className="shimmer-text" style={{ fontWeight: 700 }}>Burnout</span>{" "}
             and{" "}
             <span className="shimmer-text" style={{ fontWeight: 700 }}>manifest</span>{" "}
-            {" "}
+            
             <span className="shimmer-text" style={{ fontWeight: 700 }}>your dream life</span>.
           </p>
 
-          <p className="text-center" style={{ color: "#362E69", fontFamily: "'Outfit', sans-serif", fontSize: "1.5rem", fontWeight: 300, ...revealStyle(4) }}>
-            Risk free program. Money Back Guarantee.
-          </p>
+          <p
+  className="text-center text-[0.85rem] sm:text-[1.2rem] md:text-[1.5rem] whitespace-nowrap"
+  style={{
+    color: "#362E69",
+    fontFamily: "'Outfit', sans-serif",
+    fontWeight: 300,
+    ...revealStyle(4),
+  }}
+>
+  Risk free program. Money Back Guarantee.
+</p>
 
-          <form onSubmit={handleSubmit} className="w-full mt-8" style={{ maxWidth: "480px" }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+          <form onSubmit={handleSubmit} className="w-full mt-6 sm:mt-8" style={{ maxWidth: "480px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
               {/* Name */}
               <div style={{ position: "relative" }}>
                 <span style={iconStyle("name")}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                     <circle cx="12" cy="7" r="4" />
                   </svg>
@@ -340,7 +376,7 @@ export default function ObtainPage() {
               {/* Email */}
               <div style={{ position: "relative" }}>
                 <span style={iconStyle("email")}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect width="20" height="16" x="2" y="4" rx="2" />
                     <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                   </svg>
@@ -361,7 +397,7 @@ export default function ObtainPage() {
               {/* Phone */}
               <div style={{ position: "relative" }}>
                 <span style={iconStyle("mobile")}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                   </svg>
                 </span>
@@ -381,7 +417,7 @@ export default function ObtainPage() {
               {/* Location */}
               <div style={{ position: "relative" }}>
                 <span style={iconStyle("city")}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                     <circle cx="12" cy="10" r="3" />
                   </svg>
@@ -406,9 +442,9 @@ export default function ObtainPage() {
                 className="btn-shine"
                 style={{
                   width: "100%",
-                  padding: "18px 24px",
+                  padding: "16px 20px",
                   borderRadius: "14px",
-                  fontSize: "1.2rem",
+                  fontSize: "1.1rem",
                   fontFamily: "'Outfit', sans-serif",
                   fontWeight: 700,
                   color: "#FFFFFF",
@@ -428,20 +464,21 @@ export default function ObtainPage() {
           </form>
 
           {/* Policy Links */}
-          <div className="mt-10 flex flex-wrap justify-center gap-4">
-            <a href="/privacy-policy" className="text-[#6B5B95] hover:text-[#4a2060] transition-colors text-sm font-medium underline underline-offset-2">
-              Privacy Policy
-            </a>
-            <span className="text-[#B4B1D5]">|</span>
-            <a href="/terms-and-conditions" className="text-[#6B5B95] hover:text-[#4a2060] transition-colors text-sm font-medium underline underline-offset-2">
-              Terms & Conditions
-            </a>
-            <span className="text-[#B4B1D5]">|</span>
-            <a href="/refund-policy" className="text-[#6B5B95] hover:text-[#4a2060] transition-colors text-sm font-medium underline underline-offset-2">
-              Refund Policy
-            </a>
+<div className="mt-8 sm:mt-10 flex flex-nowrap justify-center items-center gap-2 sm:gap-4">
+            <a href="/privacy-policy" className="text-[#6B5B95] hover:text-[#4a2060] transition-colors text-[10px] sm:text-sm font-medium underline underline-offset-2">
+  Privacy Policy
+</a>
+<span className="text-[#B4B1D5] text-[10px] sm:text-sm">|</span>
+<a href="/terms-and-conditions" className="text-[#6B5B95] hover:text-[#4a2060] transition-colors text-[10px] sm:text-sm font-medium underline underline-offset-2">
+  Terms & Conditions
+</a>
+<span className="text-[#B4B1D5] text-[10px] sm:text-sm">|</span>
+<a href="/refund-policy" className="text-[#6B5B95] hover:text-[#4a2060] transition-colors text-[10px] sm:text-sm font-medium underline underline-offset-2">
+  Refund Policy
+</a>
+
           </div>
-          <p className="text-center text-xs text-[#6B5B95]/50 mt-3">
+          <p className="text-center text-[10px] sm:text-xs text-[#6B5B95]/50 mt-3">
             © 2025 Dr. Vrushali Saraswat | Happiness Holistic Clinic. All Rights Reserved.
           </p>
         </div>
