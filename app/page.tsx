@@ -306,7 +306,7 @@ export default function ObtainPage() {
             <span className="shimmer-text" style={{ fontWeight: 700 }}>Burnout</span>{" "}
             and{" "}
             <span className="shimmer-text" style={{ fontWeight: 700 }}>manifest</span>{" "}
-            their{" "}
+            {" "}
             <span className="shimmer-text" style={{ fontWeight: 700 }}>your dream life</span>.
           </p>
 
