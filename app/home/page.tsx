@@ -257,7 +257,6 @@ export default function Home() {
               <video
                 src="/uplift.mp4"
                 autoPlay
-                muted
                 loop
                 controls
                 playsInline
