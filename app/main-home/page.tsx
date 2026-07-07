@@ -120,7 +120,7 @@ export default function MainHomePage() {
   return (
     <>
       <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Outfit:wght@300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Charm:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Outfit:wght@300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&display=swap"
         rel="stylesheet"
       />
 
@@ -367,6 +367,10 @@ export default function MainHomePage() {
                         display: "block",
                         fontSize: "clamp(2.2rem, 5vw, 5rem)",
                         color: "#4a2060",
+                        fontFamily: "'Charm', cursive",
+                        fontWeight: 700,
+                        textShadow: "0 4px 20px rgba(239,154,126,0.3)",
+                        letterSpacing: "0.06em",
                       }}
                     >
                       Uplift
@@ -402,32 +406,25 @@ export default function MainHomePage() {
                 {/* CTA Button */}
                 <div className="fade-in-up-4 pt-2">
                   <a
-                    href="https://pages.razorpay.com/pl_QzeWz5qOyKRAu3/view"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-shine pulse-btn inline-flex items-center gap-2 bg-white text-[#4a2060] font-semibold px-7 sm:px-9 py-3.5 sm:py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
+                    href="/"
+                    className="btn-shine pulse-btn inline-block"
                     style={{
+                      padding: "16px 40px",
+                      borderRadius: "14px",
+                      fontSize: "1.1rem",
                       fontFamily: "'Outfit', sans-serif",
-                      fontSize: "clamp(0.9rem, 2vw, 1.05rem)",
                       fontWeight: 700,
-                      letterSpacing: "0.05em",
-                      border: "2px solid rgba(74,32,96,0.1)",
+                      color: "#FFFFFF",
+                      background: "linear-gradient(90deg, #c8963e 0%, #e8c170 30%, #c8963e 50%, #e8c170 70%, #c8963e 100%)",
+                      border: "none",
+                      boxShadow: "0 8px 30px rgba(239,154,126,0.4), 0 2px 8px rgba(212,96,62,0.25)",
+                      transition: "all 0.3s ease",
+                      letterSpacing: "0.03em",
+                      textDecoration: "none",
+                      display: "inline-block",
                     }}
                   >
-                    BOOK CLARITY CALL
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M5 12h14" />
-                      <path d="m12 5 7 7-7 7" />
-                    </svg>
+                    Register
                   </a>
                 </div>
               </div>
