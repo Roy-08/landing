@@ -1,9 +1,20 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import Programs from "../components/Programs";
+import Testimonials from "../components/Testimonials";
 
 export default function MainHomePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 60);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -176,7 +187,7 @@ export default function MainHomePage() {
         }
         .marquee-content {
           display: inline-block;
-          animation: marqueeScroll 20s linear infinite;
+          animation: marqueeScroll 45s linear infinite;
         }
         .nav-pill {
           backdrop-filter: blur(12px);
@@ -206,132 +217,139 @@ export default function MainHomePage() {
           style={{ zIndex: 0 }}
         />
 
-        {/* MARQUEE STRIP - Purple background with golden text */}
-        <div
-          className="relative z-20 w-full py-2.5"
-          style={{ background: "#4a2060" }}
-        >
-          <div className="marquee-container">
-            <div className="marquee-content">
-              <span
-                style={{
-                  fontFamily: "'Outfit', sans-serif",
-                  fontWeight: 700,
-                  fontSize: "0.9rem",
-                  color: "#c8963e",
-                  letterSpacing: "0.15em",
-                  textTransform: "uppercase",
-                }}
-              >
-                India&apos;s No 1 Happiness Coach &nbsp;&nbsp;★&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;★&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;★&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;★&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;★&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;★&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;★&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;★&nbsp;&nbsp;
-              </span>
-              <span
-                style={{
-                  fontFamily: "'Outfit', sans-serif",
-                  fontWeight: 700,
-                  fontSize: "0.9rem",
-                  color: "#c8963e",
-                  letterSpacing: "0.15em",
-                  textTransform: "uppercase",
-                }}
-              >
-                India&apos;s No 1 Happiness Coach &nbsp;&nbsp;★&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;★&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;★&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;★&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;★&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;★&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;★&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;★&nbsp;&nbsp;
-              </span>
+        {/* STICKY HEADER - Marquee + Navbar together, stays fixed at top */}
+        <div className="sticky top-0 z-50">
+          {/* MARQUEE STRIP AT TOP - Small font, slow speed, no stars */}
+          <div
+            className="w-full py-1.5"
+            style={{ background: "#4a2060" }}
+          >
+            <div className="marquee-container">
+              <div className="marquee-content">
+                <span
+                  style={{
+                    fontFamily: "'Outfit', sans-serif",
+                    fontWeight: 400,
+                    fontSize: "0.65rem",
+                    color: "#c8963e",
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  India&apos;s No 1 Happiness Coach &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </span>
+                <span
+                  style={{
+                    fontFamily: "'Outfit', sans-serif",
+                    fontWeight: 400,
+                    fontSize: "0.65rem",
+                    color: "#c8963e",
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  India&apos;s No 1 Happiness Coach &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; India&apos;s No 1 Happiness Coach &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </span>
+              </div>
             </div>
           </div>
+
+          {/* NAVIGATION BAR - Dr Vrushali + centered pill nav in same line */}
+          <nav className="flex items-center justify-center py-3 px-4 sm:px-8 gap-4 sm:gap-6"
+            style={{ transition: "all 0.3s ease" }}
+          >
+            {/* Dr Vrushali - shrinks on scroll */}
+            <span
+              style={{
+                fontFamily: "'Great Vibes', cursive",
+                fontWeight: 400,
+                fontSize: scrolled ? "1.3rem" : "2rem",
+                color: "#4a2060",
+                lineHeight: 1.2,
+                transition: "font-size 0.3s ease",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Dr Vrushali
+            </span>
+
+            {/* Nav links - centered pill shape */}
+            <div className="nav-pill rounded-full px-5 sm:px-8 py-2.5 flex items-center justify-center gap-5 sm:gap-8">
+              <a
+                href="#"
+                style={{
+                  fontFamily: "'Outfit', sans-serif",
+                  fontWeight: 600,
+                  fontSize: "0.95rem",
+                  color: "#c8963e",
+                  textDecoration: "none",
+                }}
+              >
+                Home
+              </a>
+              <a
+                href="#about"
+                style={{
+                  fontFamily: "'Outfit', sans-serif",
+                  fontWeight: 500,
+                  fontSize: "0.95rem",
+                  color: "#4a2060",
+                  textDecoration: "none",
+                }}
+              >
+                About
+              </a>
+              <a
+                href="#programs"
+                style={{
+                  fontFamily: "'Outfit', sans-serif",
+                  fontWeight: 500,
+                  fontSize: "0.95rem",
+                  color: "#4a2060",
+                  textDecoration: "none",
+                }}
+              >
+                Programs
+              </a>
+              <a
+                href="#testimonial"
+                style={{
+                  fontFamily: "'Outfit', sans-serif",
+                  fontWeight: 500,
+                  fontSize: "0.95rem",
+                  color: "#4a2060",
+                  textDecoration: "none",
+                }}
+              >
+                Testimonial
+              </a>
+            </div>
+          </nav>
         </div>
 
-        {/* NAVIGATION BAR - Pill shaped, floating */}
-        <nav className="relative z-20 flex justify-center pt-5 px-4">
-          <div className="nav-pill rounded-full px-6 sm:px-10 py-3 flex items-center gap-6 sm:gap-10">
-            <a
-              href="#"
-              style={{
-                fontFamily: "'Outfit', sans-serif",
-                fontWeight: 600,
-                fontSize: "0.95rem",
-                color: "#c8963e",
-                textDecoration: "none",
-              }}
-            >
-              Home
-            </a>
-            <a
-              href="#about"
-              style={{
-                fontFamily: "'Outfit', sans-serif",
-                fontWeight: 500,
-                fontSize: "0.95rem",
-                color: "#4a2060",
-                textDecoration: "none",
-              }}
-            >
-              About
-            </a>
-            <a
-              href="#programs"
-              style={{
-                fontFamily: "'Outfit', sans-serif",
-                fontWeight: 500,
-                fontSize: "0.95rem",
-                color: "#4a2060",
-                textDecoration: "none",
-              }}
-            >
-              Programs
-            </a>
-            <a
-              href="#testimonial"
-              style={{
-                fontFamily: "'Outfit', sans-serif",
-                fontWeight: 500,
-                fontSize: "0.95rem",
-                color: "#4a2060",
-                textDecoration: "none",
-              }}
-            >
-              Testimonial
-            </a>
-          </div>
-        </nav>
-
         {/* HERO SECTION */}
-        <section className="relative z-10 px-4 sm:px-6 lg:px-12 pt-10 sm:pt-16 pb-10 sm:pb-16">
+        <section className="relative z-10 px-4 sm:px-6 lg:px-12 pt-8 sm:pt-12 pb-10 sm:pb-16">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
               {/* LEFT SIDE - Text Content */}
               <div className="space-y-5 sm:space-y-6 fade-in-left">
-                {/* Name in script font */}
-                <h1
-                  style={{
-                    fontFamily: "'Great Vibes', cursive",
-                    fontWeight: 400,
-                    fontSize: "clamp(2.8rem, 6vw, 4.5rem)",
-                    color: "#4a2060",
-                    lineHeight: 1.1,
-                    marginBottom: "0.5rem",
-                  }}
-                >
-                  Dr Vrushali
-                </h1>
-
                 {/* Badge - Happiness Coach */}
                 <div className="fade-in-up-1">
                   <span
                     style={{
                       display: "inline-block",
-                      background: "#c8963e",
+                      background: "linear-gradient(135deg, #c8963e, #e8c170)",
                       color: "#ffffff",
                       fontFamily: "'Outfit', sans-serif",
-                      fontWeight: 300,
-                      fontSize: "clamp(0.1rem, 2.4vw, 9.0rem)",
-                      letterSpacing: "0.2em",
+                      fontWeight: 600,
+                      fontSize: "0.75rem",
+                      letterSpacing: "0.25em",
                       textTransform: "uppercase",
-                      padding: "8px 20px",
-                      borderRadius: "4px",
+                      padding: "6px 18px",
+                      borderRadius: "20px",
                     }}
                   >
-                    Happiness Coach
+                    ✦ Happiness Coach ✦
                   </span>
                 </div>
 
@@ -347,7 +365,7 @@ export default function MainHomePage() {
                     <span
                       style={{
                         display: "block",
-                        fontSize: "clamp(3rem, 8vw, 10rem)",
+                        fontSize: "clamp(2.2rem, 5vw, 5rem)",
                         color: "#4a2060",
                       }}
                     >
@@ -357,7 +375,7 @@ export default function MainHomePage() {
                       className="shimmer-gold"
                       style={{
                         display: "block",
-                        fontSize: "clamp(3rem, 8vw, 10rem)",
+                        fontSize: "clamp(2.2rem, 5vw, 5rem)",
                       }}
                     >
                       your life
@@ -457,6 +475,14 @@ export default function MainHomePage() {
               </div>
             </div>
           </div>
+        </section>
+
+        {/* PROGRAMS SECTION */}
+        <Programs />
+
+        {/* TESTIMONIALS SECTION */}
+        <section id="testimonial" className="relative z-10">
+          <Testimonials />
         </section>
 
         {/* FOOTER */}
