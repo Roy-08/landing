@@ -146,40 +146,35 @@ export default function ObtainPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    try {
-      const GOOGLE_SHEET_URL =
-        "https://script.google.com/macros/s/AKfycbwxpW_GAnB0p9SyBpWmIw46r3_yt_xYLQFv5pH2X3r65TGiT-ILWHUHbp71nQIs9nAuMg/exec";
+    const GOOGLE_SHEET_URL =
+      "https://script.google.com/macros/s/AKfycbwxpW_GAnB0p9SyBpWmIw46r3_yt_xYLQFv5pH2X3r65TGiT-ILWHUHbp71nQIs9nAuMg/exec";
 
-      const isConfigured = !GOOGLE_SHEET_URL.includes("YOUR_GOOGLE_SCRIPT_ID");
+    const isConfigured = !GOOGLE_SHEET_URL.includes("YOUR_GOOGLE_SCRIPT_ID");
 
-      if (isConfigured) {
-        await fetch(GOOGLE_SHEET_URL, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: formData.name,
-            email: formData.email,
-            mobile: formData.mobile,
-            city: formData.city,
-            timestamp: new Date().toISOString(),
-          }),
-        });
-      }
-
-      setSubmitted(true);
-      setTimeout(() => { window.location.href = "/home"; }, 2000);
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      setSubmitted(true);
-      setTimeout(() => { window.location.href = "/home"; }, 2000);
-    } finally {
-      setIsSubmitting(false);
+    // Fire-and-forget: send data in background, don't wait for response
+    if (isConfigured) {
+      fetch(GOOGLE_SHEET_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          mobile: formData.mobile,
+          city: formData.city,
+          timestamp: new Date().toISOString(),
+        }),
+      }).catch((error) => {
+        console.error("Error submitting form:", error);
+      });
     }
+
+    // Redirect instantly without waiting for the fetch to complete
+    window.location.href = "/home";
   };
 
   const revealStyle = (index: number): React.CSSProperties => ({
@@ -302,7 +297,7 @@ export default function ObtainPage() {
             }}
           >
             If you are a{" "}
-            <span className="shimmer-text" style={{ fontWeight: 500 }}>CXO, Founder, Doctor</span> Or{" "} <span className="shimmer-text" style={{ fontWeight: 500 }}>CEO</span>{" "}
+            <span className="shimmer-text" style={{ fontWeight: 500 }}>CXO, founder, Doctor</span> Or{" "} <span className="shimmer-text" style={{ fontWeight: 500 }}>CEO</span>{" "}
             of your life.
           </p>
 
@@ -486,4 +481,3 @@ export default function ObtainPage() {
     </>
   );
 }
-
