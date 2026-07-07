@@ -117,6 +117,11 @@ const Programs = () => {
             <div
               key={program.id}
               className="group relative rounded-xl overflow-hidden cursor-pointer"
+              onClick={() => {
+                if (program.title === "Uplift") {
+                  window.location.href = "/home";
+                }
+              }}
               onMouseEnter={() => setHoveredId(program.id)}
               onMouseLeave={() => setHoveredId(null)}
               style={{
